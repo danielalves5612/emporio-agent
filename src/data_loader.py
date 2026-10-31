@@ -11,3 +11,7 @@ def load_customers():
 def load_order_items():
     items = pd.read_csv('data/desafio_tecnico_ai_eng - order_items.csv')
     return items
+
+def load_orders():
+    orders = pd.read_csv('data/desafio_tecnico_ai_eng - orders.csv')
+    return orders
