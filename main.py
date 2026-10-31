@@ -1,4 +1,4 @@
-from src.data_loader import load_products, load_customers, load_order_items, load_orders
+from src.data_loader import load_products, load_customers, load_order_items, load_orders, load_promotions
 
 print()
 print('====== Products ======')
@@ -20,3 +20,8 @@ print('====== Orders ======')
 print()
 orders = load_orders()
 print(orders.shape)
+print()
+print('====== Promotions ======')
+print()
+promotions = load_promotions()
+print(promotions.shape)
