@@ -1,13 +1,17 @@
-from src.data_loader import load_products
-from src.data_loader import load_customers
+from src.data_loader import load_products, load_customers, load_order_items, load_orders, load_promotions, load_categories
 
 print()
-print('====== Lista de Produtos ======')
+print('====== Products ======')
 print()
 products = load_products()
 print(products.shape)
 print()
-print('====== Lista de Clientes ======')
+print('====== Customers ======')
 print()
 customers = load_customers()
 print(customers.shape)
+print()
+print('====== Order Items ======')
+print()
+order_items = load_order_items()
+print(order_items.shape)
