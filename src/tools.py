@@ -1,3 +1,4 @@
+from src.data_loader import load_categories, load_products
 from src.order_lookup import find_order, verify_order_owner
 from src.product_search import get_availability, search_products
 
@@ -49,3 +50,34 @@ def get_order_status(order_id: int, email: str) -> dict:
         "order_date": order["order_date"],
         "estimated_delivery": order["estimated_delivery"],
     }
+
+
+def browse_products(category: str, max_price: float) -> list:
+    """List the products that can be bought now in a category, up to a price.
+
+    Use this tool when the customer wants options or recommendations, for
+    example "acoustic guitars up to R$ 1000". Do not use it for a specific
+    product name; use find_products for that.
+
+    Returns at most 15 products, cheapest first, each with product_id, name,
+    price_brl and stock_quantity. Only products that are active and in stock
+    are returned. The list is empty if nothing matches.
+
+    Args:
+        category: the category name. One of: "Guitarras", "Baixos",
+            "Baterias e Percussão", "Teclados e Pianos", "Violões",
+            "Instrumentos de Sopro (Madeiras)", "Instrumentos de Sopro (Metais)",
+            "Cordas Orquestrais", "Ukuleles".
+        max_price: the maximum price in reais. If the customer gave no limit,
+            use 1000000.
+    """
+    categories = load_categories()
+    products = load_products()
+    matching = categories[categories["name"].str.contains(category, case=False)]
+    in_category = products["category_id"].isin(matching["category_id"])
+    can_buy = (products["status"] == "active") & (products["stock_quantity"] > 0)
+    affordable = products["price_brl"] <= max_price
+    results = products[in_category & can_buy & affordable]
+    results = results.sort_values("price_brl").head(15)
+    columns = ["product_id", "name", "price_brl", "stock_quantity"]
+    return results[columns].to_dict(orient="records")

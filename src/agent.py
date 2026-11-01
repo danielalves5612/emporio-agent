@@ -3,7 +3,7 @@ from google import genai
 from google.genai import types
 
 from src.data_loader import load_policies
-from src.tools import find_products, get_order_status
+from src.tools import find_products, get_order_status, browse_products
 
 load_dotenv()
 client = genai.Client()
@@ -82,6 +82,6 @@ def create_chat():
         model=MODEL_NAME,
         config=types.GenerateContentConfig(
             system_instruction=FULL_SYSTEM_PROMPT,
-            tools=[find_products, get_order_status],
+            tools=[find_products, get_order_status, browse_products],
         ),
     )
