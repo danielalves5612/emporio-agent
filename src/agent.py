@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+
 from src.tools import find_products
 
 load_dotenv()
@@ -56,13 +57,15 @@ store in Campo Grande, Mato Grosso do Sul, Brazil. The store's motto is
 """
 
 
-def ask_agent(user_message):
-    response = client.models.generate_content(
+def ask_agent(chat, user_message):
+    response = chat.send_message(user_message)
+    return response.text
+
+
+def create_chat():
+    return client.chats.create(
         model=MODEL_NAME,
-        contents=user_message,
         config=types.GenerateContentConfig(
-            system_instruction=SYSTEM_PROMPT, 
-            tools=[find_products]
+            system_instruction=SYSTEM_PROMPT, tools=[find_products]
         ),
     )
-    return response.text
