@@ -1,4 +1,5 @@
 import pandas as pd
+from pypdf import PdfReader
 
 
 def load_products():
@@ -29,3 +30,11 @@ def load_promotions():
 def load_categories():
     categories = pd.read_csv("data/desafio_tecnico_ai_eng - categories.csv")
     return categories
+
+
+def load_policies():
+    reader = PdfReader("data/políticas_da_loja.pdf")
+    pages = []
+    for page in reader.pages:
+        pages.append(page.extract_text(extraction_mode="layout"))
+    return "\n".join(pages)
