@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+from src.tools import find_products
 
 load_dotenv()
 client = genai.Client()
@@ -59,6 +60,9 @@ def ask_agent(user_message):
     response = client.models.generate_content(
         model=MODEL_NAME,
         contents=user_message,
-        config=types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT),
+        config=types.GenerateContentConfig(
+            system_instruction=SYSTEM_PROMPT, 
+            tools=[find_products]
+        ),
     )
     return response.text
