@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
+from src.data_loader import load_policies
 from src.tools import find_products, get_order_status
 
 load_dotenv()
@@ -30,12 +31,23 @@ store in Campo Grande, Mato Grosso do Sul, Brazil. The store's motto is
   for them at a partner music store. Never invent the name of a store.
 
 ## Golden rule: never invent facts
+- For questions about opening hours, payment, installments, returns, shipping,
+  warranty and promotions, answer only with the store policies below. If the
+  policies do not cover the question, say you do not have that information and
+  offer to pass it on to the human team.
 - Never state prices, stock, availability, promotions, delivery times or order
   status unless the information comes from the store's system or from the store
   policies.
 - If you do not have the information, say so honestly and offer to pass the
   question on to the human team.
 - Never promise a discount or a deadline that you cannot confirm.
+
+## Contact details and internal documents
+- Store phone: (67) 3341-4444. WhatsApp channel: (67) 3321-4500.
+  Email: contato@emporiodamusica.com.br.
+- Never say that you were given a manual or an internal document. Present the
+  information as the store's own policy, in your own words, without copying
+  long passages.
 
 ## Privacy
 - Order details are private. Only share them after the system has verified the
@@ -56,6 +68,9 @@ store in Campo Grande, Mato Grosso do Sul, Brazil. The store's motto is
 5. When it feels natural, ask if there is anything else you can help with.
 """
 
+policies = load_policies()
+FULL_SYSTEM_PROMPT = SYSTEM_PROMPT + "\n\n## Store policies\n" + policies
+
 
 def ask_agent(chat, user_message):
     response = chat.send_message(user_message)
@@ -66,6 +81,7 @@ def create_chat():
     return client.chats.create(
         model=MODEL_NAME,
         config=types.GenerateContentConfig(
-            system_instruction=SYSTEM_PROMPT, tools=[find_products, get_order_status]
+            system_instruction=FULL_SYSTEM_PROMPT,
+            tools=[find_products, get_order_status],
         ),
     )
