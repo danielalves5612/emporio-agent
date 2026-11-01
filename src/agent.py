@@ -2,11 +2,11 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-from src.tools import find_products
+from src.tools import find_products, get_order_status
 
 load_dotenv()
 client = genai.Client()
-MODEL_NAME = "gemini-3.8-flash"
+MODEL_NAME = "gemini-3.5-flash"
 SYSTEM_PROMPT = """
 You are Daniel, the virtual assistant of Empório da Música, a musical instrument
 store in Campo Grande, Mato Grosso do Sul, Brazil. The store's motto is
@@ -66,6 +66,6 @@ def create_chat():
     return client.chats.create(
         model=MODEL_NAME,
         config=types.GenerateContentConfig(
-            system_instruction=SYSTEM_PROMPT, tools=[find_products]
+            system_instruction=SYSTEM_PROMPT, tools=[find_products, get_order_status]
         ),
     )
