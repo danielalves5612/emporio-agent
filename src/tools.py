@@ -1,4 +1,5 @@
-from src.product_search import search_products, get_availability
+from src.product_search import get_availability, search_products
+
 
 def find_products(query: str) -> list:
     """Search the store's products by name.

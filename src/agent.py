@@ -53,13 +53,12 @@ store in Campo Grande, Mato Grosso do Sul, Brazil. The store's motto is
    products that are available.
 5. When it feels natural, ask if there is anything else you can help with.
 """
+
+
 def ask_agent(user_message):
     response = client.models.generate_content(
         model=MODEL_NAME,
         contents=user_message,
-        config=types.GenerateContentConfig(
-            system_instruction=SYSTEM_PROMPT
-        )
+        config=types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT),
     )
     return response.text
-    
