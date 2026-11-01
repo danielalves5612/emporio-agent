@@ -1,5 +1,13 @@
 from src.agent import ask_agent, create_chat
 
 chat = create_chat()
-print(ask_agent(chat, "Quanto custa o Yamaha C40?"))
-print(ask_agent(chat, "E tem em estoque?"))
+
+while True:
+    text = input("> ").strip()
+    if text == "":
+        continue
+    if text.lower() == 'sair':
+        break
+    print("Daniel está digitando...")
+    answer = ask_agent(chat, text)
+    print(answer)
