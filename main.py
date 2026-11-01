@@ -1,3 +1,3 @@
-from src.product_search import search_products
+from src.agent import ask_agent
 
-print(search_products('yamaha'))
+print(ask_agent("Quanto custa o yamaha C40?"))
