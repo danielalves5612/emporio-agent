@@ -13,7 +13,8 @@ while True:
     print("Daniel está digitando...")
     try:
         answer = ask_agent(chat, text)
-    except errors.APIError:
+    except errors.APIError as error:
+        print(f"[debug] {str(error)[:80]}")
         print(
             "O sistema está com instabilidade, por favor, tente novamente em alguns minutos."
         )
