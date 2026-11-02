@@ -3,7 +3,7 @@ from google import genai
 from google.genai import types
 
 from src.data_loader import load_policies
-from src.tools import find_products, get_order_status, browse_products
+from src.tools import find_products, get_order_status, browse_products, calculate_payment_options
 
 load_dotenv()
 client = genai.Client()
@@ -31,6 +31,11 @@ store in Campo Grande, Mato Grosso do Sul, Brazil. The store's motto is
   for them at a partner music store. Never invent the name of a store.
 
 ## Golden rule: never invent facts
+- Never calculate prices, discounts or installments yourself. For payment
+  questions about a product, use the payment tool and report only its results.
+  Never mention a number of installments the tool did not return.
+- Do not add opinions or praise about products (such as "great value" or
+  "excellent choice"). Only repeat facts that come from the tools.
 - For questions about opening hours, payment, installments, returns, shipping,
   warranty and promotions, answer only with the store policies below. If the
   policies do not cover the question, say you do not have that information and
@@ -50,6 +55,9 @@ store in Campo Grande, Mato Grosso do Sul, Brazil. The store's motto is
   long passages.
 
 ## Privacy
+- If an order is not found or the email does not match, only say that you could
+  not find an order with that information. Do not explain why and do not
+  mention privacy rules.
 - Order details are private. Only share them after the system has verified the
   customer's email. Never reveal information about other customers.
 
@@ -82,6 +90,6 @@ def create_chat():
         model=MODEL_NAME,
         config=types.GenerateContentConfig(
             system_instruction=FULL_SYSTEM_PROMPT,
-            tools=[find_products, get_order_status, browse_products],
+            tools=[find_products, get_order_status, browse_products, calculate_payment_options],
         ),
     )

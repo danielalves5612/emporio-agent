@@ -1,6 +1,7 @@
 from src.data_loader import load_categories, load_products
 from src.order_lookup import find_order, verify_order_owner
 from src.product_search import get_availability, search_products
+from src.payments import get_payment_options
 
 
 def find_products(query: str) -> list:
@@ -81,3 +82,21 @@ def browse_products(category: str, max_price: float) -> list:
     results = results.sort_values("price_brl").head(15)
     columns = ["product_id", "name", "price_brl", "stock_quantity"]
     return results[columns].to_dict(orient="records")
+
+
+def calculate_payment_options(price_brl: float) -> dict:
+    """Calculate the payment options for a price: PIX price and installments.
+
+    Always use this tool when the customer asks about PIX, installments or how
+    much a product costs in a certain number of installments. Never do these
+    calculations yourself. Use the regular price from the catalog tools.
+
+    Returns the PIX price (5% discount), the maximum number of installments
+    without interest and the value of each installment. Do not mention any
+    number of installments larger than max_installments.
+
+    Args:
+        price_brl: the product price in reais, taken from find_products or
+            browse_products.
+    """
+    return get_payment_options(price_brl)
